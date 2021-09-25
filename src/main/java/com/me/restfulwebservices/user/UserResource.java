@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class UserResource {
     }
 
     @PostMapping("/users")
-    public ResponseEntity<Object> createUser(@RequestBody User userToSave) {
+    public ResponseEntity<Object> createUser(@Valid @RequestBody User userToSave) {
         User savedUser = userDaoService.save(userToSave);
 
         URI location = ServletUriComponentsBuilder
@@ -40,5 +41,14 @@ public class UserResource {
                 .buildAndExpand(savedUser.getId()).toUri();
 
         return ResponseEntity.created(location).build();
+    }
+
+    @DeleteMapping("/users/{userId}")
+    public void deleteUser(@PathVariable int userId) {
+        User userToDelete = userDaoService.deleteById(userId);
+
+        if (userToDelete == null) {
+            throw new UserNotFoundException("id-" + userId);
+        }
     }
 }
