@@ -2,6 +2,7 @@ package com.me.restfulwebservices.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
@@ -66,9 +67,7 @@ public class UserResource {
     }
 
     @GetMapping("/hello-world-internationalized")
-    public String helloWorldInternationalized(
-            @RequestHeader(name = "Accept-Language", required = false) Locale locale
-            ) {
-        return messageSource.getMessage("good.morning.message", null, locale);
+    public String helloWorldInternationalized() {
+        return messageSource.getMessage("good.morning.message", null, LocaleContextHolder.getLocale());
     }
 }
